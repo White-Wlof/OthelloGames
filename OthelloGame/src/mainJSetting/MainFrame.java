@@ -5,7 +5,7 @@ import javax.swing.JFrame;
 public class MainFrame extends JFrame {
 	public MainFrame(String title) {
 		setTitle(title);
-		setSize(300, 300);
+		setSize(350, 350);
 		setLocationRelativeTo(null);
 		setResizable(false);
 	}

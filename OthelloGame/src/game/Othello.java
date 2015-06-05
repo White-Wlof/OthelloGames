@@ -1,4 +1,7 @@
 package game;
+
+import java.util.ArrayList;
+
 /** Othelloクラス
  * @author Seazic1
  * オセロの処理全般を書いたクラス
@@ -35,7 +38,7 @@ public class Othello {
 					}
 				}
 			}
-		}		
+		}
 		turnstone = Turn_Black;
 
 
@@ -56,6 +59,159 @@ public class Othello {
 			turnstone = Turn_Black;
 		}
 
+	}
+	/**
+	 * 置ける位置をリスト構造で格納して返す
+	 */
+	public ArrayList<int[]> getSetStoneArray(){
+		ArrayList<int[]> setStoneArray = new ArrayList<int[]>();
+		int length;
+		if(lengthx < lengthy){
+			length = lengthy;
+		}else{
+			length  = lengthx;
+		}
+		for(int cnt_x = 0;cnt_x < board.length;cnt_x++){
+			for(int cnt_y = 0;cnt_y < board[cnt_x].length;cnt_y++){
+				if(board[cnt_x][cnt_y] == 0){
+					for(int cnt_around = 0;cnt_around < 9;cnt_around++){
+						if(cnt_around == 4){
+							continue;
+						}
+						int searchx = cnt_around%3-1;
+						int searchy = cnt_around/3-1;
+						for(int cnt = 1 ;cnt < length+1;cnt++){
+							int searchPosx;
+							int searchPosy;
+							searchPosx = cnt_x+(searchx*cnt);
+							searchPosy = cnt_y+(searchy*cnt);
+							if(searchPosx < 0 || searchPosx > lengthx-1){
+								break;
+							}if(searchPosy < 0 || searchPosy > lengthy-1){
+								break;
+							}
+							if(board[searchPosx][searchPosy] == 0){
+								break;
+							}
+							if (board[searchPosx][searchPosy] == turnstone) {
+								if(cnt == 1){
+									break;
+								}else{
+									int[] a = new int[]{cnt_x,cnt_y};
+									setStoneArray.add(a);
+								}	
+							}
+						}
+					}
+				}
+			}
+		}
+		return setStoneArray;
+	}
+	/**
+	 * 置いた(x,y)の位置でひっくり返せるStoneの数を返す
+	 * @return num
+	 */
+	public int getSetStoneChengeNum(int x,int y){
+		int num = 0;
+		int[][] board = this.board.clone();
+		if(x < 0 || x > lengthx-1){
+			return -1;
+		}
+		if(y < 0 || y > lengthy-1){
+			return -1;
+		}
+		if(board[x][y] != 0){
+			return -2;
+		}
+		int searchx = 0;
+		int searchy = 0;
+		int length;
+		if(lengthx < lengthy){
+			length = lengthy;
+		}else{
+			length  = lengthx;
+		}
+		for(int cnt_around = 0;cnt_around < 9;cnt_around++){
+			searchx = cnt_around%3-1;
+			searchy = cnt_around/3-1;
+			if(cnt_around == 4){
+				continue;
+			}
+			for(int cnt = 1;cnt < length+1;cnt++){
+				int searchPosx;
+				int searchPosy;
+				searchPosx = x+(searchx*cnt);
+				searchPosy = y+(searchy*cnt);
+				if(searchPosx < 0 || searchPosx > lengthx-1){
+					break;
+				}if(searchPosy < 0 || searchPosy > lengthy-1){
+					break;
+				}
+				if(board[searchPosx][searchPosy] == 0){
+					break;
+				}else if (board[searchPosx][searchPosy] == turnstone) {
+					if(cnt == 1){
+						break;
+					}else{
+						num+=cnt-1;
+						break;
+					}
+				}
+			}
+		}
+		return num;
+	}
+	public int getSetStoneNum(int x,int y){
+		int num = 0;
+		int[][] board = this.board.clone();
+		if(x < 0 || x > lengthx-1){
+			return -1;
+		}
+		if(y < 0 || y > lengthy-1){
+			return -1;
+		}
+		if(board[x][y] != 0){
+			return -2;
+		}
+		int searchx = 0;
+		int searchy = 0;
+		int length;
+		if(lengthx < lengthy){
+			length = lengthy;
+		}else{
+			length  = lengthx;
+		}
+		for(int cnt_around = 0;cnt_around < 9;cnt_around++){
+			searchx = cnt_around%3-1;
+			searchy = cnt_around/3-1;
+			if(cnt_around == 4){
+				continue;
+			}
+			for(int cnt = 1;cnt < length+1;cnt++){
+				int searchPosx;
+				int searchPosy;
+				searchPosx = x+(searchx*cnt);
+				searchPosy = y+(searchy*cnt);
+				if(searchPosx < 0 || searchPosx > lengthx-1){
+					break;
+				}if(searchPosy < 0 || searchPosy > lengthy-1){
+					break;
+				}
+				if(board[searchPosx][searchPosy] == 0){
+					break;
+				}else if (board[searchPosx][searchPosy] == turnstone) {
+					if(cnt == 1){
+						break;
+					}else{
+						num = getSetStoneArray().size();
+						System.out.println("mySize:" + num);
+						break;
+					}
+				}
+			}
+		}
+		return num;
 	}
 	/** setStoneメソッド
 	 * @param x 
