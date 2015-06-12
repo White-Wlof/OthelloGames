@@ -392,4 +392,16 @@ public class Othello {
 		}
 		return stoneSet[maxIndex];
 	}
+	public int[] getStoneset(){
+		return stoneSet;
+	}
+	public int getStoneIndex(int Index){
+		int index = -1;
+		for (int i = 0; i < stoneSet.length; i++) {
+			if(stoneSet[i] == Index){
+				index = i;
+			}
+		}
+		return Index;
+	}
 }

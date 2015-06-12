@@ -1,6 +1,7 @@
 package gameJSetting;
 
 import game.Othello;
+import game.Stone;
 import gameMain.GameMain;
 
 import java.awt.Color;
@@ -9,8 +10,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.Timer;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -19,16 +22,24 @@ import javax.swing.JPanel;
 public class GamePanel extends JPanel implements MouseListener, ActionListener {
 	private Othello othello;
 	private int[][] board;
+	private int[][] oldboad;
+	private int[] stoneSet;
+	private Stone[][] stones;
 	private int posX,posY;
 	private int cellSize;
 	private int flag;
+
+	private int AItime;
+
 	private JButton button;
 	private String mode;
 	private JFrame gFrame,frame;
 	private Random rad;
 	private int whiteFlag, blackFlag;
 	private String whiteString, blackString;
+	private int waitTime;
 	public GamePanel(String mode,JFrame gFrame,JFrame frame) {
+		waitTime = 50;
 		rad = new Random();
 		whiteFlag = rad.nextInt(4);
 		blackFlag = rad.nextInt(4);
@@ -38,29 +49,64 @@ public class GamePanel extends JPanel implements MouseListener, ActionListener {
 		setBounds(0, 0, 350, 400);
 		othello = new Othello();
 		board = othello.getBoard();
+		oldboad = new int[board.length][board[0].length];
+		stones = new Stone[board.length][board[0].length];
+		stoneSet = othello.getStoneset();
 		posX = 50;
 		posY = 50;
 		cellSize = 30;
+		timeReset(waitTime);
+		for (int i = 0; i < stones.length; i++) {
+			for (int j = 0; j < stones[i].length; j++) {
+				oldboad[i][j] = 0;
+				stones[i][j] = new Stone(posX+(i*cellSize), posY+(j*cellSize), cellSize, Color.black);
+				stones[i][j].setVisible(false);
+			}
+		}
 		addMouseListener(this);
 	}
 	public void running(){
+		for (int i = 0; i < stones.length; i++) {
+			for (int j = 0; j < stones[i].length; j++) {
+				if(oldboad[i][j] != board[i][j]){
+					stones[i][j].setVisible(true);
+					if(board[i][j] == othello.Turn_Black){
+						stones[i][j].Chenge(Color.BLACK);
+					}else if(board[i][j] == othello.Turn_White){
+						stones[i][j].Chenge(Color.WHITE);
+					}
+					oldboad[i][j] = board[i][j];
+				}
+				stones[i][j].refresh();
+			}
+		}
+
 		if(mode == "easyAI"){
 			whiteString = "easyAI";
 			blackString = "Player";
 			if(othello.getTurn() == othello.Turn_White){
-				easyAI();
+				if(timeManege()){
+					easyAI();
+					timeReset(waitTime);
+				}
 			}
 		}else if(mode == "normalAI"){
 			whiteString = "normalAI";
 			blackString = "Player";
 			if(othello.getTurn() == othello.Turn_White){
-				normalAI();
+				if(timeManege()){
+					normalAI();
+					timeReset(waitTime);
+				}
 			}
 		}else if(mode == "hardAI"){
 			whiteString = "hardAI";
 			blackString = "Player";
 			if(othello.getTurn() == othello.Turn_White){
-				hardAI();
+				if(timeManege()){
+					hardAI();
+					timeReset(waitTime);
+				}
 			}
 		}else if(mode == "2P"){
 			whiteString = "Player";
@@ -82,7 +128,10 @@ public class GamePanel extends JPanel implements MouseListener, ActionListener {
 				break;
 			}
 			if(othello.getTurn() == othello.Turn_White){
-				ultimateAI();
+				if(timeManege()){
+					ultimateAI();
+					timeReset(waitTime);
+				}
 			}
 		}else if(mode == "DebugMode"){
 			switch (whiteFlag) {
@@ -122,8 +171,24 @@ public class GamePanel extends JPanel implements MouseListener, ActionListener {
 			}else if(othello.getTurn() == othello.Turn_Black){
 				flag = blackFlag;
 			}
-			debugMode();
+			if(timeManege()){
+				debugMode();
+				timeReset(waitTime);
+			}
 		}
+	}
+	private void timeReset(int time){
+		AItime = time;
+	}
+	private boolean timeManege(){
+
+		if(AItime > 0){
+			AItime--;
+			return false;
+		}else{
+			return true;
+		}
+
 	}
 	private void easyAI(){
 		int i,j,radX,radY;
@@ -231,13 +296,14 @@ public class GamePanel extends JPanel implements MouseListener, ActionListener {
 				}
 				g.setColor(backColor);
 				g.fillRect(posX+(cellSize*i), posY+(cellSize*j), cellSize, cellSize);
-				if(board[i][j] == othello.Turn_Black){
-					g.setColor(Color.BLACK);
-					g.fillRoundRect(posX+(cellSize*i), posY+(cellSize*j), cellSize, cellSize, cellSize, cellSize);
-				}else if(board[i][j] == othello.Turn_White){
-					g.setColor(Color.WHITE);
-					g.fillRoundRect(posX+(cellSize*i), posY+(cellSize*j), cellSize, cellSize, cellSize, cellSize);
-				}
+				//				if(board[i][j] == othello.Turn_Black){
+				//					g.setColor(Color.BLACK);
+				//					g.fillRoundRect(posX+(cellSize*i), posY+(cellSize*j), cellSize, cellSize, cellSize, cellSize);
+				//				}else if(board[i][j] == othello.Turn_White){
+				//					g.setColor(Color.WHITE);
+				//					g.fillRoundRect(posX+(cellSize*i), posY+(cellSize*j), cellSize, cellSize, cellSize, cellSize);
+				//				}
+				stones[i][j].show(g);
 			}
 		}
 		if(othello.getTurn() == othello.Turn_White){
