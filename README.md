@@ -19,4 +19,15 @@ Version2.1.0
 		- Black => White
 
 
+Version2.2.0
+* Revise a　bug
+	- First start 'Menu'
+		None menu bar
+* Revise Animation
+	- ChengeStone
+		- DebugMode
+			- Don't adapt something
+		- The other
+			- Adapt something
+
 CopyWright©2015 White-Wolf ALL. RIGHTS RESERVED.

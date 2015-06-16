@@ -171,10 +171,7 @@ public class GamePanel extends JPanel implements MouseListener, ActionListener {
 			}else if(othello.getTurn() == othello.Turn_Black){
 				flag = blackFlag;
 			}
-			if(timeManege()){
-				debugMode();
-				timeReset(waitTime);
-			}
+			debugMode();
 		}
 	}
 	private void timeReset(int time){
@@ -296,14 +293,17 @@ public class GamePanel extends JPanel implements MouseListener, ActionListener {
 				}
 				g.setColor(backColor);
 				g.fillRect(posX+(cellSize*i), posY+(cellSize*j), cellSize, cellSize);
-				//				if(board[i][j] == othello.Turn_Black){
-				//					g.setColor(Color.BLACK);
-				//					g.fillRoundRect(posX+(cellSize*i), posY+(cellSize*j), cellSize, cellSize, cellSize, cellSize);
-				//				}else if(board[i][j] == othello.Turn_White){
-				//					g.setColor(Color.WHITE);
-				//					g.fillRoundRect(posX+(cellSize*i), posY+(cellSize*j), cellSize, cellSize, cellSize, cellSize);
-				//				}
-				stones[i][j].show(g);
+				if(mode == "DebugMode"){
+					if(board[i][j] == othello.Turn_Black){
+						g.setColor(Color.BLACK);
+						g.fillRoundRect(posX+(cellSize*i), posY+(cellSize*j), cellSize, cellSize, cellSize, cellSize);
+					}else if(board[i][j] == othello.Turn_White){
+						g.setColor(Color.WHITE);
+						g.fillRoundRect(posX+(cellSize*i), posY+(cellSize*j), cellSize, cellSize, cellSize, cellSize);
+					}
+				}else{
+					stones[i][j].show(g);
+				}
 			}
 		}
 		if(othello.getTurn() == othello.Turn_White){

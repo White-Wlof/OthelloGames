@@ -19,6 +19,7 @@ public class GameEngine implements Runnable {
 		gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		gameFrame.setVisible(true);
 		gameFrame.add(gamePanel);
+		gameFrame.revalidate();
 	}
 	@Override
 	public void run() {

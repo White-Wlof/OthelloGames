@@ -11,5 +11,6 @@ public class Main {
 		mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		mainFrame.setVisible(true);
 		mainFrame.add(mainPanel);
+		mainFrame.revalidate();
 	}
 }

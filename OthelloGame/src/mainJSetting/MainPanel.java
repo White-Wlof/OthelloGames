@@ -53,8 +53,9 @@ public class MainPanel extends JPanel implements ActionListener,ItemListener {
 		reload();
 	}
 	private void reload(){
-		setVisible(false);
-		setVisible(true);
+//		setVisible(false);
+//		setVisible(true);
+		revalidate();
 	}
 	private void imageAdjustment(int i, int j){
 		image = null;
